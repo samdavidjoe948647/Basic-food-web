@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Ordering System</title>
+    <title>Food Ordering System - ₹ Indian</title>
     <style>
         * {
             margin: 0;
@@ -25,23 +25,39 @@
         }
 
         header {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            background: linear-gradient(135deg, #ff6b35, #ffa62e);
             color: white;
             padding: 2rem;
             border-radius: 10px;
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "🍛 🍕 🍔 🍝 🥤";
+            position: absolute;
+            top: 10px;
+            left: 0;
+            right: 0;
+            font-size: 2rem;
+            opacity: 0.2;
         }
 
         header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
         }
 
         header p {
             font-size: 1.1rem;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
 
         .app-grid {
@@ -65,11 +81,14 @@
         }
 
         .section-title {
-            color: #ff6b6b;
+            color: #ff6b35;
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 2px solid #eee;
             font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .category {
@@ -77,9 +96,15 @@
         }
 
         .category h3 {
-            color: #ff8e53;
+            color: #ff6b35;
             margin-bottom: 15px;
             font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff5f0;
+            padding: 10px 15px;
+            border-radius: 8px;
         }
 
         .menu-items {
@@ -90,34 +115,42 @@
 
         .menu-item {
             background: #fff;
-            border: 1px solid #e0e0e0;
+            border: 2px solid #f0f0f0;
             border-radius: 8px;
             padding: 15px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
         }
 
         .menu-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-color: #ff8e53;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.1);
+            border-color: #ffa62e;
         }
 
         .menu-item.selected {
-            border-color: #ff6b6b;
-            background-color: #fff5f5;
+            border-color: #ff6b35;
+            background-color: #fff5f0;
         }
 
         .item-name {
             font-weight: 600;
             font-size: 1.1rem;
             margin-bottom: 5px;
+            color: #333;
         }
 
         .item-price {
-            color: #ff6b6b;
+            color: #ff6b35;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            margin: 10px 0;
+        }
+
+        .item-price::before {
+            content: "₹";
+            font-size: 1.1rem;
         }
 
         .item-description {
@@ -130,31 +163,40 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .qty-btn {
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
             border: none;
-            background: #ff6b6b;
+            background: #ff6b35;
             color: white;
-            border-radius: 50%;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s;
         }
 
         .qty-btn:hover {
-            background: #ff5252;
+            background: #ff5722;
+            transform: scale(1.1);
+        }
+
+        .qty-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .quantity {
             font-weight: bold;
-            min-width: 30px;
+            min-width: 35px;
             text-align: center;
+            font-size: 1.1rem;
         }
 
         /* Order Summary */
@@ -165,19 +207,21 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             position: sticky;
             top: 20px;
+            height: fit-content;
         }
 
         .order-items {
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
             margin-bottom: 20px;
+            padding-right: 10px;
         }
 
         .order-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #eee;
         }
 
@@ -191,68 +235,93 @@
 
         .item-total {
             font-weight: bold;
-            color: #ff6b6b;
+            color: #ff6b35;
+            white-space: nowrap;
+        }
+
+        .item-total::before {
+            content: "₹";
         }
 
         .remove-item {
-            color: #ff6b6b;
+            color: #ff6b35;
             cursor: pointer;
-            margin-left: 10px;
-            font-size: 1.2rem;
+            margin-left: 15px;
+            font-size: 1.5rem;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
         }
 
         .remove-item:hover {
-            color: #ff3333;
+            color: white;
+            background: #ff6b35;
         }
 
         .summary {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #fff5f0, #fffbf8);
             padding: 20px;
             border-radius: 8px;
             margin-top: 20px;
+            border: 1px solid #ffe0d0;
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
         }
 
         .summary-row.total {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: bold;
-            color: #ff6b6b;
-            border-top: 2px solid #eee;
+            color: #ff6b35;
             padding-top: 10px;
             margin-top: 10px;
+            border-top: 2px solid #ffa62e;
         }
 
         /* Buttons */
         .buttons {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .btn {
-            padding: 12px 24px;
+            padding: 14px 24px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
             font-size: 1rem;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
-            background: #ff6b6b;
+            background: linear-gradient(135deg, #ff6b35, #ff8e53);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #ff5252;
+            background: linear-gradient(135deg, #ff5722, #ff6b35);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
         }
 
         .btn-secondary {
@@ -262,15 +331,24 @@
 
         .btn-secondary:hover {
             background: #5a6268;
+            transform: translateY(-2px);
         }
 
         .btn-success {
-            background: #28a745;
+            background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
         }
 
         .btn-success:hover {
-            background: #218838;
+            background: linear-gradient(135deg, #218838, #1ea876);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         /* Notification */
@@ -281,15 +359,22 @@
             padding: 15px 25px;
             background: #28a745;
             color: white;
-            border-radius: 5px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
             transform: translateX(150%);
             transition: transform 0.3s ease;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .notification.show {
             transform: translateX(0);
+        }
+
+        .notification.error {
+            background: #dc3545;
         }
 
         /* Empty Order */
@@ -305,24 +390,132 @@
             opacity: 0.5;
         }
 
-        /* Food Icons */
-        .food-icon {
-            font-size: 1.5rem;
-            margin-right: 10px;
+        /* Order Success Screen */
+        .order-success {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .order-success.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 2px solid #ff6b35;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            color: #28a745;
+            margin-bottom: 20px;
+            animation: bounce 1s ease infinite;
+        }
+
+        .success-title {
+            color: #28a745;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .order-id {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: monospace;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            border: 1px dashed #ddd;
+        }
+
+        .order-id span {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .delivery-time {
+            background: #fff5f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.1rem;
+        }
+
+        .delivery-time strong {
+            color: #ff6b35;
+        }
+
+        .success-message {
+            color: #666;
+            margin: 20px 0;
+            line-height: 1.8;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Scrollbar Styling */
+        .order-items::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .order-items::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .order-items::-webkit-scrollbar-thumb {
+            background: #ffa62e;
+            border-radius: 10px;
+        }
+
+        .order-items::-webkit-scrollbar-thumb:hover {
+            background: #ff8e53;
+        }
+
+        /* Currency Symbol */
+        .currency {
+            color: #ff6b35;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🍕 Food Ordering System</h1>
-            <p>Order your favorite meals with just a few clicks!</p>
+            <h1>🍽️ Food Ordering System</h1>
+            <p>Order delicious Indian & Continental food online | All prices in ₹ INR</p>
         </header>
 
         <div class="app-grid">
             <!-- Menu Section -->
             <div class="menu-section">
-                <h2 class="section-title">Our Menu</h2>
+                <h2 class="section-title">📋 Our Menu</h2>
                 
                 <!-- Pizza Category -->
                 <div class="category">
@@ -332,25 +525,25 @@
                     </div>
                 </div>
 
+                <!-- Indian Category -->
+                <div class="category">
+                    <h3>🍛 Indian Specials</h3>
+                    <div class="menu-items" id="indian-items">
+                        <!-- Indian items will be added by JavaScript -->
+                    </div>
+                </div>
+
                 <!-- Burgers Category -->
                 <div class="category">
-                    <h3>🍔 Burgers</h3>
+                    <h3>🍔 Burgers & Sandwiches</h3>
                     <div class="menu-items" id="burger-items">
                         <!-- Burger items will be added by JavaScript -->
                     </div>
                 </div>
 
-                <!-- Pasta Category -->
-                <div class="category">
-                    <h3>🍝 Pasta</h3>
-                    <div class="menu-items" id="pasta-items">
-                        <!-- Pasta items will be added by JavaScript -->
-                    </div>
-                </div>
-
                 <!-- Drinks Category -->
                 <div class="category">
-                    <h3>🥤 Drinks</h3>
+                    <h3>🥤 Beverages</h3>
                     <div class="menu-items" id="drink-items">
                         <!-- Drink items will be added by JavaScript -->
                     </div>
@@ -367,93 +560,138 @@
 
             <!-- Order Summary -->
             <div class="order-section">
-                <h2 class="section-title">Your Order</h2>
+                <h2 class="section-title">🛒 Your Order</h2>
                 
                 <div class="order-items" id="order-items">
                     <div class="empty-order" id="empty-order">
                         <div>🛒</div>
                         <p>Your cart is empty</p>
-                        <p>Add items from the menu</p>
+                        <p>Add items from the menu to get started</p>
                     </div>
                 </div>
 
                 <div class="summary" id="order-summary" style="display: none;">
                     <div class="summary-row">
                         <span>Subtotal:</span>
-                        <span id="subtotal">$0.00</span>
+                        <span id="subtotal">₹0.00</span>
                     </div>
                     <div class="summary-row">
-                        <span>Tax (8%):</span>
-                        <span id="tax">$0.00</span>
+                        <span>GST (18%):</span>
+                        <span id="tax">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Packaging:</span>
+                        <span id="packaging">₹15.00</span>
                     </div>
                     <div class="summary-row">
                         <span>Delivery:</span>
-                        <span id="delivery">$2.99</span>
+                        <span id="delivery">₹30.00</span>
                     </div>
                     <div class="summary-row total">
-                        <span>Total:</span>
-                        <span id="total">$0.00</span>
+                        <span>Total Amount:</span>
+                        <span id="total">₹0.00</span>
                     </div>
                 </div>
 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="clearOrder()">
-                        Clear Order
+                    <button class="btn btn-secondary" onclick="clearOrder()" id="clear-btn">
+                        🗑️ Clear All
                     </button>
-                    <button class="btn btn-success" onclick="placeOrder()">
-                        Place Order
+                    <button class="btn btn-success" onclick="placeOrder()" id="order-btn" disabled>
+                        ✅ Place Order
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Order Success Screen -->
+    <div class="order-success" id="order-success">
+        <div class="success-content">
+            <div class="success-icon">✅</div>
+            <h2 class="success-title">Order Confirmed!</h2>
+            
+            <div class="order-id">
+                Order ID: <span id="success-order-id">-----</span>
+            </div>
+            
+            <div class="delivery-time">
+                🚚 Estimated Delivery: <strong id="delivery-time">30-40 minutes</strong>
+            </div>
+            
+            <div class="success-message">
+                Thank you for your order! Your food is being prepared with love and care.
+                You will receive an SMS confirmation shortly.
+            </div>
+            
+            <div class="order-details" id="success-order-details" style="margin: 20px 0; text-align: left;">
+                <!-- Order details will be inserted here -->
+            </div>
+            
+            <div class="buttons" style="margin-top: 30px;">
+                <button class="btn btn-primary" onclick="newOrder()">
+                    🍽️ Order More
+                </button>
+                <button class="btn btn-secondary" onclick="closeSuccess()">
+                    ✕ Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
     <div class="notification" id="notification">
-        Item added to cart!
+        <span>✅</span>
+        <span>Item added to cart!</span>
     </div>
 
     <script>
-        // Menu Data
+        // Menu Data with Indian Rupees (₹)
         const menuData = {
             pizza: [
-                { id: 1, name: "Margherita", price: 8.99, description: "Classic tomato and mozzarella" },
-                { id: 2, name: "Pepperoni", price: 10.99, description: "Pepperoni and extra cheese" },
-                { id: 3, name: "Veggie", price: 9.99, description: "Fresh vegetables and herbs" },
-                { id: 4, name: "Hawaiian", price: 11.99, description: "Ham and pineapple delight" }
+                { id: 1, name: "Margherita Pizza", price: 299, description: "Classic tomato and mozzarella cheese" },
+                { id: 2, name: "Pepperoni Pizza", price: 399, description: "Spicy pepperoni with extra cheese" },
+                { id: 3, name: "Paneer Tikka Pizza", price: 349, description: "Indian style with spicy paneer" },
+                { id: 4, name: "Veg Supreme Pizza", price: 449, description: "Loaded with fresh vegetables" }
+            ],
+            indian: [
+                { id: 5, name: "Butter Chicken", price: 349, description: "Creamy tomato based curry" },
+                { id: 6, name: "Paneer Butter Masala", price: 299, description: "Cottage cheese in rich gravy" },
+                { id: 7, name: "Chicken Biryani", price: 299, description: "Hyderabadi style aromatic rice" },
+                { id: 8, name: "Dal Makhani", price: 199, description: "Black lentils slow cooked" },
+                { id: 9, name: "Garlic Naan", price: 59, description: "Soft bread with garlic butter" },
+                { id: 10, name: "Roti/Chapati", price: 20, description: "Whole wheat flatbread (2 pcs)" }
             ],
             burgers: [
-                { id: 5, name: "Cheeseburger", price: 6.99, description: "Beef patty with cheese" },
-                { id: 6, name: "Chicken Burger", price: 7.99, description: "Grilled chicken with sauce" },
-                { id: 7, name: "Veggie Burger", price: 6.49, description: "Plant-based patty" },
-                { id: 8, name: "Bacon Burger", price: 8.99, description: "With crispy bacon" }
-            ],
-            pasta: [
-                { id: 9, name: "Spaghetti Carbonara", price: 12.99, description: "Creamy bacon pasta" },
-                { id: 10, name: "Fettuccine Alfredo", price: 11.99, description: "Creamy Alfredo sauce" },
-                { id: 11, name: "Lasagna", price: 13.99, description: "Layered pasta with meat" }
+                { id: 11, name: "Classic Veg Burger", price: 99, description: "With fresh veggies and sauce" },
+                { id: 12, name: "Chicken Burger", price: 149, description: "Grilled chicken patty" },
+                { id: 13, name: "Paneer Burger", price: 129, description: "Spicy paneer patty" },
+                { id: 14, name: "Club Sandwich", price: 179, description: "Triple decker with veggies" }
             ],
             drinks: [
-                { id: 12, name: "Coke", price: 1.99, description: "Regular or Diet" },
-                { id: 13, name: "Lemonade", price: 2.49, description: "Freshly squeezed" },
-                { id: 14, name: "Iced Tea", price: 2.29, description: "Sweetened or Unsweetened" },
-                { id: 15, name: "Orange Juice", price: 3.49, description: "Fresh orange juice" }
+                { id: 15, name: "Coca Cola", price: 50, description: "300ml Can" },
+                { id: 16, name: "Fresh Lime Soda", price: 60, description: "Sweet/Salty" },
+                { id: 17, name: "Mango Lassi", price: 80, description: "Fresh yogurt drink" },
+                { id: 18, name: "Masala Chai", price: 40, description: "Indian spiced tea" },
+                { id: 19, name: "Mineral Water", price: 30, description: "1 litre bottle" }
             ],
             desserts: [
-                { id: 16, name: "Cheesecake", price: 5.99, description: "New York style" },
-                { id: 17, name: "Chocolate Brownie", price: 4.99, description: "Warm with ice cream" },
-                { id: 18, name: "Tiramisu", price: 6.49, description: "Italian classic" }
+                { id: 20, name: "Gulab Jamun", price: 99, description: "2 pieces with syrup" },
+                { id: 21, name: "Chocolate Brownie", price: 129, description: "With vanilla ice cream" },
+                { id: 22, name: "Rasmalai", price: 119, description: "Cottage cheese in sweet milk" },
+                { id: 23, name: "Ice Cream Scoop", price: 80, description: "Vanilla/Chocolate/Strawberry" }
             ]
         };
 
         // Current order
         let currentOrder = [];
+        let orderHistory = [];
 
         // Initialize the menu
         function initializeMenu() {
-            // Render pizza items
             renderMenuItems('pizza', menuData.pizza);
+            renderMenuItems('indian', menuData.indian);
             renderMenuItems('burger', menuData.burgers);
-            renderMenuItems('pasta', menuData.pasta);
             renderMenuItems('drink', menuData.drinks);
             renderMenuItems('dessert', menuData.desserts);
         }
@@ -468,12 +706,12 @@
                 itemElement.className = 'menu-item';
                 itemElement.innerHTML = `
                     <div class="item-name">${item.name}</div>
-                    <div class="item-price">$${item.price.toFixed(2)}</div>
+                    <div class="item-price">${item.price}</div>
                     <div class="item-description">${item.description}</div>
                     <div class="quantity-controls">
-                        <button class="qty-btn" onclick="decreaseQuantity(${item.id})">-</button>
+                        <button class="qty-btn" onclick="decreaseQuantity(${item.id})" id="dec-${item.id}" disabled>-</button>
                         <span class="quantity" id="qty-${item.id}">0</span>
-                        <button class="qty-btn" onclick="increaseQuantity(${item.id})">+</button>
+                        <button class="qty-btn" onclick="increaseQuantity(${item.id})" id="inc-${item.id}">+</button>
                     </div>
                 `;
                 container.appendChild(itemElement);
@@ -496,7 +734,7 @@
             
             updateQuantityDisplay(itemId);
             updateOrderSummary();
-            showNotification(`${item.name} added to cart!`);
+            showNotification(`Added ${item.name} to cart!`);
         }
 
         // Decrease quantity of an item
@@ -518,9 +756,15 @@
         function updateQuantityDisplay(itemId) {
             const existingOrderItem = currentOrder.find(order => order.id === itemId);
             const quantityDisplay = document.getElementById(`qty-${itemId}`);
+            const decBtn = document.getElementById(`dec-${itemId}`);
+            const incBtn = document.getElementById(`inc-${itemId}`);
             
             if (quantityDisplay) {
-                quantityDisplay.textContent = existingOrderItem ? existingOrderItem.quantity : 0;
+                const qty = existingOrderItem ? existingOrderItem.quantity : 0;
+                quantityDisplay.textContent = qty;
+                
+                if (decBtn) decBtn.disabled = qty === 0;
+                if (incBtn) incBtn.disabled = qty >= 10;
             }
         }
 
@@ -538,15 +782,18 @@
             const orderItemsContainer = document.getElementById('order-items');
             const emptyOrderDiv = document.getElementById('empty-order');
             const summaryDiv = document.getElementById('order-summary');
+            const orderBtn = document.getElementById('order-btn');
             
             if (currentOrder.length === 0) {
                 emptyOrderDiv.style.display = 'block';
                 summaryDiv.style.display = 'none';
+                orderBtn.disabled = true;
                 return;
             }
             
             emptyOrderDiv.style.display = 'none';
             summaryDiv.style.display = 'block';
+            orderBtn.disabled = false;
             
             // Render order items
             orderItemsContainer.innerHTML = '';
@@ -561,24 +808,26 @@
                 orderItemElement.innerHTML = `
                     <div class="item-info">
                         <div class="item-name">${orderItem.name}</div>
-                        <div class="item-description">${orderItem.quantity} x $${orderItem.price.toFixed(2)}</div>
+                        <div class="item-description">${orderItem.quantity} × ₹${orderItem.price}</div>
                     </div>
-                    <div class="item-total">$${itemTotal.toFixed(2)}</div>
+                    <div class="item-total">${itemTotal}</div>
                     <div class="remove-item" onclick="removeItem(${orderItem.id})">×</div>
                 `;
                 orderItemsContainer.appendChild(orderItemElement);
             });
             
             // Calculate totals
-            const tax = subtotal * 0.08;
-            const delivery = 2.99;
-            const total = subtotal + tax + delivery;
+            const tax = subtotal * 0.18; // 18% GST
+            const packaging = 15;
+            const delivery = subtotal > 500 ? 0 : 30; // Free delivery above ₹500
+            const total = subtotal + tax + packaging + delivery;
             
             // Update summary display
-            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-            document.getElementById('delivery').textContent = `$${delivery.toFixed(2)}`;
-            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+            document.getElementById('tax').textContent = `₹${tax.toFixed(2)}`;
+            document.getElementById('packaging').textContent = `₹${packaging.toFixed(2)}`;
+            document.getElementById('delivery').textContent = delivery === 0 ? 'FREE' : `₹${delivery.toFixed(2)}`;
+            document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
         }
 
         // Remove item from order
@@ -586,16 +835,17 @@
             currentOrder = currentOrder.filter(order => order.id !== itemId);
             updateQuantityDisplay(itemId);
             updateOrderSummary();
+            showNotification("Item removed from cart!", "error");
         }
 
         // Clear entire order
         function clearOrder() {
             if (currentOrder.length === 0) {
-                alert('Your order is already empty!');
+                showNotification('Your cart is already empty!', "error");
                 return;
             }
             
-            if (confirm('Are you sure you want to clear your order?')) {
+            if (confirm('Are you sure you want to clear your cart?')) {
                 currentOrder = [];
                 
                 // Reset all quantity displays
@@ -606,46 +856,55 @@
                 }
                 
                 updateOrderSummary();
-                showNotification('Order cleared!');
+                showNotification('Cart cleared successfully!');
             }
+        }
+
+        // Generate random order ID
+        function generateOrderId() {
+            const prefix = 'ORD';
+            const timestamp = Date.now().toString().slice(-6);
+            const random = Math.floor(Math.random() * 9000) + 1000;
+            return `${prefix}${timestamp}${random}`;
         }
 
         // Place order
         function placeOrder() {
             if (currentOrder.length === 0) {
-                alert('Please add items to your order first!');
+                showNotification('Please add items to your cart first!', "error");
                 return;
             }
             
+            // Calculate totals for display
             const subtotal = currentOrder.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const tax = subtotal * 0.08;
-            const delivery = 2.99;
-            const total = subtotal + tax + delivery;
+            const tax = subtotal * 0.18;
+            const packaging = 15;
+            const delivery = subtotal > 500 ? 0 : 30;
+            const total = subtotal + tax + packaging + delivery;
             
-            const orderDetails = currentOrder.map(item => 
-                `${item.quantity}x ${item.name} - $${(item.price * item.quantity).toFixed(2)}`
-            ).join('\n');
+            // Generate order details for success screen
+            const orderId = generateOrderId();
+            const deliveryTime = subtotal > 800 ? '25-35 minutes' : '30-40 minutes';
             
-            const orderMessage = `
-Thank you for your order!
+            // Save to order history
+            const orderData = {
+                id: orderId,
+                items: [...currentOrder],
+                subtotal: subtotal,
+                tax: tax,
+                packaging: packaging,
+                delivery: delivery,
+                total: total,
+                timestamp: new Date().toLocaleString('en-IN'),
+                deliveryTime: deliveryTime
+            };
             
-Order Summary:
-${orderDetails}
-
-Subtotal: $${subtotal.toFixed(2)}
-Tax (8%): $${tax.toFixed(2)}
-Delivery: $${delivery.toFixed(2)}
-Total: $${total.toFixed(2)}
-
-Your food will be ready in 20-30 minutes!
-            `;
+            orderHistory.push(orderData);
             
-            alert(orderMessage);
+            // Show success screen
+            showOrderSuccess(orderData);
             
-            // In a real application, you would send this data to a server
-            console.log('Order placed:', currentOrder);
-            
-            // Clear order after successful placement
+            // Clear current order
             currentOrder = [];
             updateOrderSummary();
             
@@ -657,15 +916,93 @@ Your food will be ready in 20-30 minutes!
             }
         }
 
+        // Show order success screen
+        function showOrderSuccess(orderData) {
+            const successScreen = document.getElementById('order-success');
+            const orderIdElement = document.getElementById('success-order-id');
+            const deliveryTimeElement = document.getElementById('delivery-time');
+            const orderDetailsElement = document.getElementById('success-order-details');
+            
+            // Update order ID and delivery time
+            orderIdElement.textContent = orderData.id;
+            deliveryTimeElement.textContent = orderData.deliveryTime;
+            
+            // Create order details HTML
+            let detailsHTML = '<h3 style="color: #ff6b35; margin-bottom: 15px;">Order Summary:</h3>';
+            detailsHTML += '<div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">';
+            
+            orderData.items.forEach(item => {
+                detailsHTML += `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>${item.quantity} × ${item.name}</span>
+                        <span style="color: #ff6b35; font-weight: bold;">₹${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `;
+            });
+            
+            detailsHTML += `
+                <hr style="margin: 15px 0; border-color: #ddd;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Subtotal:</span>
+                    <span>₹${orderData.subtotal.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>GST (18%):</span>
+                    <span>₹${orderData.tax.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Packaging:</span>
+                    <span>₹${orderData.packaging.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Delivery:</span>
+                    <span>${orderData.delivery === 0 ? 'FREE' : '₹' + orderData.delivery.toFixed(2)}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 15px; padding-top: 10px; border-top: 2px solid #ddd; font-weight: bold;">
+                    <span>Total Amount:</span>
+                    <span style="color: #28a745;">₹${orderData.total.toFixed(2)}</span>
+                </div>
+            `;
+            
+            detailsHTML += '</div>';
+            orderDetailsElement.innerHTML = detailsHTML;
+            
+            // Show success screen
+            successScreen.classList.add('active');
+            
+            // Play success sound (optional)
+            const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQ='); // Empty audio - add real sound if needed
+            audio.play().catch(() => {});
+        }
+
+        // Start new order
+        function newOrder() {
+            document.getElementById('order-success').classList.remove('active');
+            showNotification('Start adding items to your new order!');
+        }
+
+        // Close success screen
+        function closeSuccess() {
+            document.getElementById('order-success').classList.remove('active');
+        }
+
         // Show notification
-        function showNotification(message) {
+        function showNotification(message, type = 'success') {
             const notification = document.getElementById('notification');
             notification.textContent = message;
-            notification.classList.add('show');
+            notification.className = 'notification show';
+            
+            if (type === 'error') {
+                notification.classList.add('error');
+                notification.innerHTML = `<span>❌</span><span>${message}</span>`;
+            } else {
+                notification.classList.remove('error');
+                notification.innerHTML = `<span>✅</span><span>${message}</span>`;
+            }
             
             setTimeout(() => {
                 notification.classList.remove('show');
-            }, 2000);
+            }, 3000);
         }
 
         // Initialize the app when page loads
