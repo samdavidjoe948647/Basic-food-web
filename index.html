@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> PAROTTA HUT</title>
+    <title>PAROTTA HUT--Nithravilai</title>
     <style>
         * {
             margin: 0;
@@ -497,37 +497,31 @@
         .order-items::-webkit-scrollbar-thumb:hover {
             background: #ff8e53;
         }
-
-        /* Currency Symbol */
-        .currency {
-            color: #ff6b35;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>FOOD ORDEREING</h1>
+            <h1>PAROTTA HUT--Nithravilai</h1>
             <p>Order delicious Indian Food</p>
         </header>
 
         <div class="app-grid">
             <!-- Menu Section -->
             <div class="menu-section">
-                <h2 class="section-title"> Our Menu</h2>
+                <h2 class="section-title">📋 Our Menu</h2>
                 
-                <!-- Pizza Category -->
+                <!-- Parotta Category -->
                 <div class="category">
-                    <h3>PAROTTA</h3>
-                    <div class="menu-items" id="pizza-items">
-                        <!-- Pizza items will be added by JavaScript -->
+                    <h3>🥞 Parotta</h3>
+                    <div class="menu-items" id="parotta-items">
+                        <!-- Parotta items will be added by JavaScript -->
                     </div>
                 </div>
 
                 <!-- Indian Category -->
                 <div class="category">
-                    <h3>Indian Specials</h3>
+                    <h3>🍛 Indian Specials</h3>
                     <div class="menu-items" id="indian-items">
                         <!-- Indian items will be added by JavaScript -->
                     </div>
@@ -535,7 +529,7 @@
 
                 <!-- Burgers Category -->
                 <div class="category">
-                    <h3> Burgers & Sandwiches</h3>
+                    <h3>🍔 Burgers & Sandwiches</h3>
                     <div class="menu-items" id="burger-items">
                         <!-- Burger items will be added by JavaScript -->
                     </div>
@@ -543,7 +537,7 @@
 
                 <!-- Drinks Category -->
                 <div class="category">
-                    <h3> Beverages</h3>
+                    <h3>🥤 Beverages</h3>
                     <div class="menu-items" id="drink-items">
                         <!-- Drink items will be added by JavaScript -->
                     </div>
@@ -551,7 +545,7 @@
 
                 <!-- Desserts Category -->
                 <div class="category">
-                    <h3> Desserts</h3>
+                    <h3>🍰 Desserts</h3>
                     <div class="menu-items" id="dessert-items">
                         <!-- Dessert items will be added by JavaScript -->
                     </div>
@@ -620,7 +614,7 @@
             </div>
             
             <div class="success-message">
-                Thank you & visit firespot
+                Thank you & visit PAROTTA HUT again!
             </div>
             
             <div class="order-details" id="success-order-details" style="margin: 20px 0; text-align: left;">
@@ -645,13 +639,13 @@
     </div>
 
     <script>
-        // Menu Data with Indian Rupees (₹)
+        // Menu Data with Indian Rupees (₹) - Fixed category names
         const menuData = {
-            Parotta: [
-                { id: 1, name: " Bun Parotta", price: 299, description: "Classic tomato and mozzarella cheese" },
-                { id: 2, name: "Nool Parotta", price: 399, description: "Spicy pepperoni with extra cheese" },
-                { id: 3, name: "Coin Parotta", price: 349, description: "Indian style with spicy paneer" },
-                { id: 4, name: "Paal Parotta", price: 449, description: "Loaded with fresh vegetables" }
+            parotta: [
+                { id: 1, name: "Bun Parotta", price: 30, description: "Classic soft and layered parotta" },
+                { id: 2, name: "Nool Parotta", price: 30, description: "String hoppers style parotta" },
+                { id: 3, name: "Coin Parotta", price: 35, description: "Small coin sized crispy parotta" },
+                { id: 4, name: "Paal Parotta", price: 40, description: "Milk based soft parotta" }
             ],
             indian: [
                 { id: 5, name: "Butter Chicken", price: 349, description: "Creamy tomato based curry" },
@@ -688,7 +682,7 @@
 
         // Initialize the menu
         function initializeMenu() {
-            renderMenuItems('Parotta', menuData.Parotta);
+            renderMenuItems('parotta', menuData.parotta);
             renderMenuItems('indian', menuData.indian);
             renderMenuItems('burger', menuData.burgers);
             renderMenuItems('drink', menuData.drinks);
@@ -970,7 +964,7 @@
             successScreen.classList.add('active');
             
             // Play success sound (optional)
-            const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQ='); // Empty audio - add real sound if needed
+            const audio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAZGF0YQQ=');
             audio.play().catch(() => {});
         }
 
